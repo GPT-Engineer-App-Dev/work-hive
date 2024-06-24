@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Box, Container, Heading, VStack, HStack, Text, Input, Button, SimpleGrid, useColorModeValue } from "@chakra-ui/react";
+import { Box, Container, Heading, VStack, HStack, Text, Input, Button, SimpleGrid, useColorModeValue, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from "@chakra-ui/react";
 import { FaSearch, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
 import JobPostingForm from "../components/JobPostingForm";
+import JobApplicationForm from "../components/JobApplicationForm";
 
 const JobCard = ({ job }) => {
   const cardBg = useColorModeValue("white", "gray.700");
@@ -17,7 +18,12 @@ const JobCard = ({ job }) => {
         <FaMoneyBillWave />
         <Text>{job.salary}</Text>
       </HStack>
-      <Button mt={4} colorScheme="blue">Apply Now</Button>
+      <Button mt={4} colorScheme="blue" onClick={() => {
+        setSelectedJobId(job.id);
+        setIsModalOpen(true);
+      }}>
+        Apply Now
+      </Button>
     </Box>
   );
 };
@@ -31,6 +37,9 @@ const Index = () => {
     { id: 4, title: "Data Scientist", company: "Data Insights", location: "Seattle, WA", salary: "$130,000 - $160,000" },
     { id: 5, title: "Marketing Specialist", company: "Brand Builders", location: "Chicago, IL", salary: "$70,000 - $90,000" },
   ]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
   const handleAddJob = (newJob) => {
     setJobListings([...jobListings, newJob]);
@@ -79,6 +88,17 @@ const Index = () => {
           )}
         </VStack>
       </Container>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Apply for Job</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <JobApplicationForm jobId={selectedJobId} onClose={() => setIsModalOpen(false)} />
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
