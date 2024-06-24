@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import { Box, Container, Heading, VStack, HStack, Text, Input, Button, SimpleGrid, Badge, useColorModeValue } from "@chakra-ui/react";
-import { FaSearch, FaBriefcase, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
-
-const jobListings = [
-  { id: 1, title: "Software Engineer", company: "Tech Co", location: "San Francisco, CA", salary: "$120,000 - $150,000" },
-  { id: 2, title: "Product Manager", company: "Innovate Inc", location: "New York, NY", salary: "$100,000 - $130,000" },
-  { id: 3, title: "UX Designer", company: "Design Hub", location: "Austin, TX", salary: "$90,000 - $120,000" },
-  { id: 4, title: "Data Scientist", company: "Data Insights", location: "Seattle, WA", salary: "$130,000 - $160,000" },
-  { id: 5, title: "Marketing Specialist", company: "Brand Builders", location: "Chicago, IL", salary: "$70,000 - $90,000" },
-];
+import { Box, Container, Heading, VStack, HStack, Text, Input, Button, SimpleGrid, useColorModeValue } from "@chakra-ui/react";
+import { FaSearch, FaMapMarkerAlt, FaMoneyBillWave } from "react-icons/fa";
+import JobPostingForm from "../components/JobPostingForm";
 
 const JobCard = ({ job }) => {
   const cardBg = useColorModeValue("white", "gray.700");
@@ -31,6 +24,18 @@ const JobCard = ({ job }) => {
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [jobListings, setJobListings] = useState([
+    { id: 1, title: "Software Engineer", company: "Tech Co", location: "San Francisco, CA", salary: "$120,000 - $150,000" },
+    { id: 2, title: "Product Manager", company: "Innovate Inc", location: "New York, NY", salary: "$100,000 - $130,000" },
+    { id: 3, title: "UX Designer", company: "Design Hub", location: "Austin, TX", salary: "$90,000 - $120,000" },
+    { id: 4, title: "Data Scientist", company: "Data Insights", location: "Seattle, WA", salary: "$130,000 - $160,000" },
+    { id: 5, title: "Marketing Specialist", company: "Brand Builders", location: "Chicago, IL", salary: "$70,000 - $90,000" },
+  ]);
+
+  const handleAddJob = (newJob) => {
+    setJobListings([...jobListings, newJob]);
+  };
+
   const bgColor = useColorModeValue("gray.50", "gray.800");
 
   const filteredJobs = jobListings.filter(job =>
@@ -57,6 +62,11 @@ const Index = () => {
               Search
             </Button>
           </HStack>
+
+          <Box mb={8}>
+            <Heading as="h2" size="lg" mb={4}>Post a New Job</Heading>
+            <JobPostingForm onAddJob={handleAddJob} />
+          </Box>
 
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
             {filteredJobs.map(job => (
